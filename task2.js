@@ -10,6 +10,10 @@ const userNameInput = document.getElementById("userNameInput");
 const getUserButton = document.getElementById("getUserButton");
 const userCitySpan = document.getElementById("userCity");
 
+userNameInput.addEventListener("input", () => {
+  getUserButton.disabled = !userNameInput.value.length;
+});
+
 getUserButton.addEventListener("click", () => {
   fetch(url)
     .then((res) => res.json())
