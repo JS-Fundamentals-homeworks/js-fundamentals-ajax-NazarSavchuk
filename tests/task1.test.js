@@ -1,27 +1,29 @@
+// tests/task1.test.js
 const puppeteer = require('puppeteer');
 
-async function checkUsersDisplayed() {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.goto('http://127.0.0.1:5500/'); 
+describe('Task 1 - Відображення користувачів', () => {
+  let browser;
+  let page;
 
-  
-  const userList = await page.$('.usersList');
-  await  page.waitForTimeout(3000);
+  beforeAll(async () => {
+    browser = await puppeteer.launch();
+    page = await browser.newPage();
+    await page.goto('http://127.0.0.1:5500/');
+    await page.waitForTimeout(3000); 
+  }, 15000); 
 
-  if (userList) {
-    const userItems = await userList.$$('li');
+  afterAll(async () => {
+    await browser.close();
+  });
 
-    if (userItems.length > 0) {
-      console.log(`Користувачі відображені на сторінці.`);
-    } else {
-      console.log(`На сторінці немає користувачів.`);
-    }
-  } else {
-    console.log(`Елемент з класом "usersList" не знайдено на сторінці.`);
-  }
+  test('елемент .usersList присутній на сторінці', async () => {
+    const userList = await page.$('.usersList');
+    expect(userList).not.toBeNull();
+  });
 
-  await browser.close();
-}
+  test('список містить хоча б одного користувача', async () => {
+    const userItems = await page.$$('.usersList li');
+    expect(userItems.length).toBeGreaterThan(0);
+  });
 
-checkUsersDisplayed().catch(error => console.error(error));
+}, 20000); 
