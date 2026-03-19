@@ -6,19 +6,18 @@
 // Запустити програму потрібно за допомогою Live Server
 // Перевірити правильність програми - команда node tests/task2.test.js
 
+import { inputButtonDisabled } from "/inputButtonDisabled.js";
+
 const userNameInput = document.getElementById("userNameInput");
 const getUserButton = document.getElementById("getUserButton");
 const userCitySpan = document.getElementById("userCity");
 
-userNameInput.addEventListener("input", () => {
-  getUserButton.disabled = !userNameInput.value.length;
-});
+inputButtonDisabled(userNameInput, getUserButton);
 
 getUserButton.addEventListener("click", () => {
   fetch(url)
     .then((res) => res.json())
     .then((data) => {
-      console.log(data);
       const foundUser = data.find((user) =>
         user.name.toLowerCase().includes(userNameInput.value.toLowerCase()),
       );
